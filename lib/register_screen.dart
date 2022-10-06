@@ -1,3 +1,4 @@
+import 'package:account_app/HomePage.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
@@ -43,9 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
                           maxLines: 1,
                           decoration: InputDecoration(
                             hintText: 'First name',
@@ -61,9 +59,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
                           maxLines: 1,
                           decoration: InputDecoration(
                             hintText: 'Last name',
@@ -117,7 +112,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                      // if (_formKey.currentState!.validate()) {
+                      //
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
@@ -142,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                              const LoginPage(title: 'Login UI'),
+                                  const LoginPage(title: 'Login UI'),
                             ),
                           );
                         },

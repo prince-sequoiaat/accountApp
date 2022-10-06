@@ -1,5 +1,7 @@
+import 'package:account_app/context_class.dart';
 import 'package:flutter/material.dart';
 
+import 'HomePage.dart';
 import 'login_screen.dart';
 
 void main() {
@@ -29,11 +31,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      navigatorKey: NavigationService.navigatorKey, // set property
       theme: ThemeData(
         colorScheme: defaultColorScheme,
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(title: 'Login UI'),
+      home: const HomePage(),
     );
   }
 }

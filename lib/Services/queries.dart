@@ -1,6 +1,7 @@
 class DbQueries {
+  static const String TABLENAME="UserData";
   static const String createUserTable =
-      "CREATE TABLE UserData(ID INT NOT NULL,FIRST_NAME TEXT NOT NULL,LAST_NAME TEXT NOT NULL,EMAIL TEXT NOT NULL,PHONE INT NOT NULL, BALANCE DOUBLE NOT NULL,IS_DEBIT INT NOT NULL,PRIMARY KEY (ID));";
+      "CREATE TABLE $TABLENAME(ID INT NOT NULL,FIRST_NAME TEXT NOT NULL,LAST_NAME TEXT NOT NULL,EMAIL TEXT NOT NULL,PHONE INT NOT NULL, BALANCE DOUBLE NOT NULL,IS_DEBIT INT NOT NULL,PRIMARY KEY (ID));";
 }
 
 class UserModel {
@@ -8,7 +9,7 @@ class UserModel {
   final String FIRST_NAME;
   final String LAST_NAME;
   final String EMAIL;
-  final String PHONE;
+  final int PHONE;
   final double BALANCE;
   final int IS_DEBIT;
 
@@ -39,6 +40,31 @@ class UserModel {
       'BALANCE': BALANCE,
       'IS_DEBIT': IS_DEBIT,
       'PHONE': PHONE,
+    };
+  }
+}
+
+class UserLog {
+  final int? ID;
+  final String LOG;
+  final String IS_DEBIT;
+
+  UserLog({
+    this.ID,
+    required this.LOG,
+    required this.IS_DEBIT,
+  });
+
+  UserLog.fromMap(Map<String, dynamic> res)
+      : ID = res["ID"],
+        LOG = res["LOG"],
+        IS_DEBIT = res["IS_DEBIT"];
+
+  Map<String, Object?> toMap() {
+    return {
+      'ID': ID,
+      'LOG': LOG,
+      'IS_DEBIT': IS_DEBIT,
     };
   }
 }
