@@ -2,7 +2,6 @@ import 'package:account_app/context_class.dart';
 import 'package:flutter/material.dart';
 
 import 'HomePage.dart';
-import 'login_screen.dart';
 
 void main() {
   runApp(const MyApp());
