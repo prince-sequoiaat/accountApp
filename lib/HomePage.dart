@@ -174,33 +174,60 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // userLog = [];
                           money = money - 10;
+
                           handler
                               .updateTransaction(money, 0, addError: addError)
                               .whenComplete(() {
                             handler.retrieveUsers().then((value) {
-                              print(
-                                  "====><><><><><><><>>  ${value.elementAt(0).toMap()}");
+
                               userModel =
                                   UserModel.fromMap(value.elementAt(0).toMap());
+                              userLog.clear();
+
+                              handler.retrieveLogs().then((value2) {
+                                value2.forEach((element) {
+                                  setState(() {});
+
+                                  userLog.add(element);
+                                });
+                              });
+
+                              setState(() {
+                                userLog.forEach((element) {
+                                  setState(() {});
+                                });
+                              });
                             });
-                            setState(() {});
                           }).whenComplete(() {
                             setState(() {});
                           });
-                          userLog.clear();
-                          handler.retrieveLogs().then((value2) {
-                            print("------->>>>>>> ${value2.toList()}");
-                            value2.forEach((element) {
-                              userLog.add(element);
-                            });
-                          });
-                          setState(() {});
-                          userLog.forEach((element) {
-                            print("=====>${element.toMap()}");
-                            setState(() {});
-                          });
+                          // money = money - 10;
+                          // handler
+                          //     .updateTransaction(money, 0, addError: addError)
+                          //     .whenComplete(() {
+                          //   handler.retrieveUsers().then((value) {
+                          //     print(
+                          //         "====><><><><><><><>>  ${value.elementAt(0).toMap()}");
+                          //     userModel =
+                          //         UserModel.fromMap(value.elementAt(0).toMap());
+                          //   });
+                          //   setState(() {});
+                          // }).whenComplete(() {
+                          //   setState(() {});
+                          // });
+                          // userLog.clear();
+                          // handler.retrieveLogs().then((value2) {
+                          //   print("------->>>>>>> ${value2.toList()}");
+                          //   value2.forEach((element) {
+                          //     userLog.add(element);
+                          //   });
+                          // });
+                          // setState(() {});
+                          // userLog.forEach((element) {
+                          //   print("=====>${element.toMap()}");
+                          //   setState(() {});
+                          // });
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
