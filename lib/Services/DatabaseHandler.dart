@@ -9,16 +9,13 @@ class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
-      join(path, 'user_db_18.db'),
+      join(path, 'user_db_19.db'),
       singleInstance: true,
       onCreate: (database, version) async {
         await database.execute(DbQueries.createUserTable).whenComplete(() async{
           await database.execute(DbQueries.createLogTable).whenComplete(() {
             insertTransaction();
-
           });
-
-
         });
 
       },
