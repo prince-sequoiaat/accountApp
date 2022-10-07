@@ -1,4 +1,5 @@
 import 'package:account_app/Services/queries.dart';
+import 'package:account_app/TranscationTable.dart';
 import 'package:flutter/material.dart';
 
 import 'Services/DatabaseHandler.dart';
@@ -12,20 +13,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late DatabaseHandler handler;
-  int money=1000;
-UserModel ?userModel;
+  int money = 1000;
+  UserModel? userModel;
+  List<UserLog> userLog = [];
+  bool addError = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     handler = DatabaseHandler();
-    handler.initializeDB().whenComplete(() async {
-      handler.initializeDB();
-      handler.retrieveUsers().then((value) {
-        print("====><><><><><><><>>  ${value.elementAt(0).toMap()}");
-        userModel=UserModel.fromMap(value.elementAt(0).toMap());
+    handler.initializeDB().then((value2) {
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        handler.retrieveUsers().then((value) {
+          // print("====><><><><><><><>>  ${value.elementAt(0).toMap()}");
+          userModel = UserModel.fromMap(value.elementAt(0).toMap());
+        });
+// Here you can write your code
+
+        setState(() {
+          // Here you can write your code for open new view
+        });
       });
+
       setState(() {});
+    }).whenComplete(() async {
+      // handler.initializeDB();
     });
   }
 
@@ -59,7 +72,8 @@ UserModel ?userModel;
                     readOnly: true,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: '${userModel?.FIRST_NAME} ${userModel?.LAST_NAME}',
+                      hintText:
+                          '${userModel?.FIRST_NAME} ${userModel?.LAST_NAME}',
                       prefixIcon: const Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -116,16 +130,36 @@ UserModel ?userModel;
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          money=money+10;
+                          // userLog = [];
+                          money = money + 10;
 
-                          handler.updateTransaction(money, 1).whenComplete(() {
+                          handler
+                              .updateTransaction(money, 1, addError: addError)
+                              .whenComplete(() {
                             handler.retrieveUsers().then((value) {
-                              print("====><><><><><><><>>  ${value.elementAt(0).toMap()}");
-                              userModel=UserModel.fromMap(value.elementAt(0).toMap());
-                              setState(() {
+                              print(
+                                  "====><><><><><><><>>  ${value.elementAt(0).toMap()}");
+                              userModel =
+                                  UserModel.fromMap(value.elementAt(0).toMap());
+                              userLog.clear();
 
+                              handler.retrieveLogs().then((value2) {
+                                value2.forEach((element) {
+                                  setState(() {});
+
+                                  userLog.add(element);
+                                });
+                              });
+
+                              setState(() {
+                                userLog.forEach((element) {
+                                  print("======>>>> ${element.toMap()}");
+                                  setState(() {});
+                                });
                               });
                             });
+                          }).whenComplete(() {
+                            setState(() {});
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -140,17 +174,60 @@ UserModel ?userModel;
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          money=money-10;
-                          handler.updateTransaction(money, 0).whenComplete(() {
+                          money = money - 10;
+
+                          handler
+                              .updateTransaction(money, 0, addError: addError)
+                              .whenComplete(() {
                             handler.retrieveUsers().then((value) {
-                              print("====><><><><><><><>>  ${value.elementAt(0).toMap()}");
-                              userModel=UserModel.fromMap(value.elementAt(0).toMap());
+
+                              userModel =
+                                  UserModel.fromMap(value.elementAt(0).toMap());
+                              userLog.clear();
+
+                              handler.retrieveLogs().then((value2) {
+                                value2.forEach((element) {
+                                  setState(() {});
+
+                                  userLog.add(element);
+                                });
+                              });
+
+                              setState(() {
+                                userLog.forEach((element) {
+                                  setState(() {});
+                                });
+                              });
                             });
+                          }).whenComplete(() {
+                            setState(() {});
                           });
-                          setState(() {
-
-                          });
-
+                          // money = money - 10;
+                          // handler
+                          //     .updateTransaction(money, 0, addError: addError)
+                          //     .whenComplete(() {
+                          //   handler.retrieveUsers().then((value) {
+                          //     print(
+                          //         "====><><><><><><><>>  ${value.elementAt(0).toMap()}");
+                          //     userModel =
+                          //         UserModel.fromMap(value.elementAt(0).toMap());
+                          //   });
+                          //   setState(() {});
+                          // }).whenComplete(() {
+                          //   setState(() {});
+                          // });
+                          // userLog.clear();
+                          // handler.retrieveLogs().then((value2) {
+                          //   print("------->>>>>>> ${value2.toList()}");
+                          //   value2.forEach((element) {
+                          //     userLog.add(element);
+                          //   });
+                          // });
+                          // setState(() {});
+                          // userLog.forEach((element) {
+                          //   print("=====>${element.toMap()}");
+                          //   setState(() {});
+                          // });
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
@@ -166,6 +243,51 @@ UserModel ?userModel;
                   ),
                   const SizedBox(
                     height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TransactionTable()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                    ),
+                    child: const Text(
+                      'View Transactions',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      addError = !addError;
+                      setState(() {});
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          addError == true ? Colors.red : Color(0xffBB86FC),
+                      padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                    ),
+                    child: addError == true
+                        ? const Text(
+                            'Error Added',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : const Text(
+                            'Add Error',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ],
               ),

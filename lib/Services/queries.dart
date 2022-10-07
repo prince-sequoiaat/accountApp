@@ -1,7 +1,10 @@
 class DbQueries {
-  static const String TABLENAME="UserData";
+  static const String TABLENAME = "UserData";
+  static const String LOGTABLE = "LogTable";
   static const String createUserTable =
       "CREATE TABLE $TABLENAME(ID INT NOT NULL,FIRST_NAME TEXT NOT NULL,LAST_NAME TEXT NOT NULL,EMAIL TEXT NOT NULL,PHONE INT NOT NULL, BALANCE DOUBLE NOT NULL,IS_DEBIT INT NOT NULL,PRIMARY KEY (ID));";
+  static const String createLogTable =
+      "CREATE TABLE $LOGTABLE(ID INT NOT NULL,LOG TEXT NOT NULL, IS_DEBIT INT NOT NULL);";
 }
 
 class UserModel {
@@ -47,7 +50,7 @@ class UserModel {
 class UserLog {
   final int? ID;
   final String LOG;
-  final String IS_DEBIT;
+  final int IS_DEBIT;
 
   UserLog({
     this.ID,
